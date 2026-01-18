@@ -2,8 +2,10 @@
 
 Firefox-Addon zum Filtern von Kleinanzeigen-Angeboten nach dem Mitglied-seit-Datum der Anbieter.
 
+< codex/add-filter-panel-for-kleinanzeigen.de-qru5x8
 ![Ablaufdiagramm des Addons](docs/assets/flow.svg)
-
+=======
+>main
 ## Funktionsumfang
 
 - Fügt auf Ergebnislisten ein Filter-Panel hinzu, mit dem ein Stichtag gewählt werden kann.
@@ -12,6 +14,7 @@ Firefox-Addon zum Filtern von Kleinanzeigen-Angeboten nach dem Mitglied-seit-Dat
 - Markiert Anzeigen ohne ermittelbares Datum, blendet sie aber nicht automatisch aus.
 - Speichert den Filterstatus lokal und wendet ihn beim nächsten Besuch automatisch an.
 
+< codex/add-filter-panel-for-kleinanzeigen.de-qru5x8
 ## Installation (Firefox)
 
 1. Repository klonen oder als ZIP herunterladen.
@@ -33,6 +36,8 @@ Firefox-Addon zum Filtern von Kleinanzeigen-Angeboten nach dem Mitglied-seit-Dat
 
 ![Mockup des Filter-Panels](docs/assets/panel-mock.svg)
 
+README.md=======
+> main
 ## Entwicklung
 
 Die wichtigsten Dateien:
