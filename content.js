@@ -1,73 +1,76 @@
 const STORAGE_KEY = "memberSinceFilterDate";
-const LISTING_SELECTOR = "a[href*='/s-anzeige/']";
 
 function normalizeDate(value) {
-  if (!value) {
-    return null;
-  }
+  if (!value) return null;
   const parts = value.split("-");
-  if (parts.length !== 3) {
-    return null;
-  }
-  return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+  return parts.length === 3 ? new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])) : null;
 }
 
 function parseMemberSince(value) {
-  if (!value) {
-    return null;
-  }
+  if (!value) return null;
   const parts = value.split(".");
-  if (parts.length !== 3) {
-    return null;
-  }
-  return new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
+  return parts.length === 3 ? new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0])) : null;
 }
 
 function formatMemberSince(value) {
-  return value ? `Mitglied seit ${value}` : "Mitglied seit: unbekannt";
-}
-
-function getListingElement(anchor) {
-  return anchor.closest("article, li, div") || anchor;
+  return value ? value : "unbekannt";
 }
 
 function markListing(listingElement, memberSince) {
-  let badge = listingElement.querySelector(".ka-member-since-badge");
-  if (!badge) {
-    badge = document.createElement("div");
-    badge.className = "ka-member-since-badge";
-    listingElement.appendChild(badge);
+  let targetContainer = listingElement.querySelector(".aditem-main--top--left");
+  
+  if (!targetContainer) {
+      targetContainer = listingElement.querySelector(".aditem-details");
   }
-  badge.textContent = formatMemberSince(memberSince);
+
+  if (!targetContainer) return;
+
+  let badgeContainer = listingElement.querySelector(".ka-badge-inline");
+  
+  if (!badgeContainer) {
+    badgeContainer = document.createElement("div");
+    badgeContainer.className = "ka-badge-inline";
+    
+    const badge = document.createElement("div");
+    badge.className = "ka-member-since-badge";
+    
+    badgeContainer.appendChild(badge);
+    targetContainer.appendChild(badgeContainer);
+  }
+  
+  const badge = badgeContainer.querySelector(".ka-member-since-badge");
+  const icon = memberSince ? "👤" : "⚠️";
+  
+  badge.innerHTML = `<span class="ka-badge-icon">${icon}</span> <span>Seit: ${formatMemberSince(memberSince)}</span>`;
+  
   listingElement.dataset.memberSince = memberSince || "";
   listingElement.classList.toggle("ka-member-since-unknown", !memberSince);
 }
 
 function applyFilterToListing(listingElement, filterDate) {
   const memberSince = listingElement.dataset.memberSince;
-  if (!filterDate) {
-    listingElement.classList.remove("ka-member-since-hidden");
-    return;
-  }
-  if (!memberSince) {
-    listingElement.classList.remove("ka-member-since-hidden");
-    return;
-  }
+  listingElement.classList.remove("ka-member-since-hidden");
+
+  if (!filterDate || !memberSince) return;
+  
   const memberSinceDate = parseMemberSince(memberSince);
-  if (!memberSinceDate) {
-    listingElement.classList.remove("ka-member-since-hidden");
-    return;
+  if (!memberSinceDate) return;
+
+  if (memberSinceDate > filterDate) {
+    listingElement.classList.add("ka-member-since-hidden");
   }
-  const shouldHide = memberSinceDate > filterDate;
-  listingElement.classList.toggle("ka-member-since-hidden", shouldHide);
 }
 
 async function fetchMemberSince(listingUrl) {
-  const response = await browser.runtime.sendMessage({
-    type: "fetchMemberSince",
-    listingUrl
-  });
-  return response ? response.memberSince : null;
+  try {
+    const response = await browser.runtime.sendMessage({
+      type: "fetchMemberSince",
+      listingUrl
+    });
+    return response ? response.memberSince : null;
+  } catch (e) {
+    return null;
+  }
 }
 
 async function loadFilterDate() {
@@ -80,16 +83,46 @@ async function saveFilterDate(value) {
 }
 
 function buildPanel(initialValue) {
-  const panel = document.createElement("section");
-  panel.className = "ka-filter-panel";
+  const panel = document.createElement("div");
+  panel.className = "ka-filter-banner";
+  
+  // Update auf v1.0 und Live-Status Design
   panel.innerHTML = `
-    <label class="ka-filter-label">
-      Anbieter-Mitgliedschaft vor Datum anzeigen
-      <input class="ka-filter-input" type="date" value="${initialValue}" />
-    </label>
-    <p class="ka-filter-hint">
-      Anzeigen ohne Datum bleiben sichtbar und werden markiert.
-    </p>
+    <div class="ka-banner-header">
+      <div class="ka-banner-title">
+        <span style="color: var(--ka-accent); margin-right: 8px;">//</span> 
+        Kleinanzeigen Filter
+        <span class="ka-logo-cursor"></span>
+      </div>
+      <div style="font-size: 10px; font-family: var(--ka-font-mono); color: var(--ka-accent); border: 1px solid var(--ka-accent); padding: 2px 6px; border-radius: 4px; font-weight: 600;">v1.0</div>
+    </div>
+    
+    <div class="ka-banner-content">
+      <div class="ka-module">
+        <label class="ka-module-label">Beitrittsdatum Limit</label>
+        
+        <div class="ka-controls-row">
+            <div class="ka-input-wrapper">
+              <input class="ka-filter-input" type="text" placeholder="Datum wählen..." onfocus="(this.type='date')" onblur="(this.value ? this.type='date' : this.type='text')" value="${initialValue}" />
+              <span class="ka-input-icon">📅</span>
+            </div>
+            <button class="ka-apply-btn">
+                Anwenden
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </button>
+        </div>
+
+        <p class="ka-module-hint">
+          Filtert alle Anbieter heraus, die <strong>nach</strong> diesem Datum beigetreten sind.
+        </p>
+      </div>
+    </div>
+    
+    <div class="ka-banner-footer">
+      <span class="ka-footer-text">powered by <a href="https://cheswick.dev" target="_blank" class="ka-footer-link">cheswick.dev</a></span>
+    </div>
   `;
   return panel;
 }
@@ -97,53 +130,100 @@ function buildPanel(initialValue) {
 async function initializePanel() {
   const storedValue = await loadFilterDate();
   const panel = buildPanel(storedValue);
-  const container = document.querySelector("main") || document.body;
-  container.prepend(panel);
+  
+  const resultsTable = document.querySelector("#srchrslt-adtable");
+  const galleryView = document.querySelector(".is-gallery");
+  const targetContainer = resultsTable || galleryView;
+
+  if (targetContainer && targetContainer.parentNode) {
+    targetContainer.parentNode.insertBefore(panel, targetContainer);
+  } else {
+    const main = document.querySelector("main") || document.body;
+    main.prepend(panel);
+  }
 
   const input = panel.querySelector(".ka-filter-input");
-  input.addEventListener("change", async () => {
+  const applyBtn = panel.querySelector(".ka-apply-btn");
+
+  if (input.value) { input.type = 'date'; }
+
+  const applyFilter = async () => {
+    if (!input.value) { input.type = 'text'; }
     await saveFilterDate(input.value);
+    
+    const originalText = applyBtn.innerHTML;
+    applyBtn.innerHTML = `Lädt...`;
+    applyBtn.style.opacity = "0.7";
+    
     const filterDate = normalizeDate(input.value);
-    document.querySelectorAll(".ka-listing").forEach((listing) => {
+    const listings = document.querySelectorAll(".ka-listing");
+    
+    listings.forEach((listing) => {
       applyFilterToListing(listing, filterDate);
     });
+
+    setTimeout(() => {
+        applyBtn.innerHTML = originalText;
+        applyBtn.style.opacity = "1";
+    }, 300);
+  };
+
+  applyBtn.addEventListener("click", applyFilter);
+  input.addEventListener("keypress", (e) => {
+      if (e.key === 'Enter') {
+          applyFilter();
+      }
   });
 
   return normalizeDate(storedValue);
 }
 
-async function processListing(anchor, filterDate) {
-  const listingElement = getListingElement(anchor);
-  if (!listingElement || listingElement.classList.contains("ka-listing")) {
-    return;
-  }
+async function processListing(element, filterDate) {
+  if (element.classList.contains("ka-listing")) return;
+  
+  const anchor = element.querySelector("a[href*='/s-anzeige/']");
+  if (!anchor) return;
 
-  listingElement.classList.add("ka-listing");
+  element.classList.add("ka-listing");
   const listingUrl = new URL(anchor.getAttribute("href"), window.location.origin).toString();
+  
   const memberSince = await fetchMemberSince(listingUrl);
-  markListing(listingElement, memberSince);
-  applyFilterToListing(listingElement, filterDate);
+  
+  markListing(element, memberSince);
+  applyFilterToListing(element, filterDate);
 }
 
 async function processAllListings(filterDate) {
-  const anchors = Array.from(document.querySelectorAll(LISTING_SELECTOR));
-  for (const anchor of anchors) {
-    await processListing(anchor, filterDate);
+  const listings = Array.from(document.querySelectorAll("article.aditem, li.ad-listitem"));
+  for (const listing of listings) {
+    await processListing(listing, filterDate);
   }
 }
 
 async function init() {
+  if (!document.body) return;
+
   const filterDate = await initializePanel();
   await processAllListings(filterDate);
 
-  const observer = new MutationObserver(async () => {
+  const observer = new MutationObserver(async (mutations) => {
     const currentFilterDate = normalizeDate((await loadFilterDate()) || "");
-    await processAllListings(currentFilterDate);
+    let shouldUpdate = false;
+    for (const mutation of mutations) {
+      if (mutation.addedNodes.length > 0) {
+        shouldUpdate = true;
+        break;
+      }
+    }
+    if (shouldUpdate) {
+      await processAllListings(currentFilterDate);
+    }
   });
 
-  observer.observe(document.body, { childList: true, subtree: true });
+  const observerTarget = document.querySelector("#srchrslt-adtable") || document.body;
+  observer.observe(observerTarget, { childList: true, subtree: true });
 }
 
-if (window.location.hostname === "www.kleinanzeigen.de") {
+if (window.location.hostname.includes("kleinanzeigen.de")) {
   init();
 }

@@ -1,50 +1,255 @@
-.ka-filter-panel {
-  border: 1px solid #dcdcdc;
-  padding: 16px;
-  margin: 16px 0;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  font-family: Arial, sans-serif;
-  z-index: 9999;
+/* Import Fonts direkt von Google */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap');
+
+:root {
+  /* Cheswick Dark Theme Base (für das Dashboard) */
+  --ka-bg-primary: #0a0a0f;
+  --ka-bg-card: #16161f;
+  --ka-text-primary: #f0f0f5;
+  --ka-text-secondary: #8888a0;
+  
+  /* Kleinanzeigen Neon Accent */
+  --ka-accent: #869e1e;
+  --ka-accent-glow: rgba(134, 158, 30, 0.4);
+  
+  --ka-font-display: 'Outfit', sans-serif;
+  --ka-font-mono: 'JetBrains Mono', monospace;
 }
 
-.ka-filter-label {
+/* --- DASHBOARD STYLES (Unverändert gut) --- */
+.ka-filter-banner {
+  margin-bottom: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--ka-bg-primary);
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  font-family: var(--ka-font-display);
+  position: relative;
+  z-index: 90;
+}
+
+.ka-filter-banner::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -50px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--ka-accent-glow) 0%, transparent 65%);
+  filter: blur(50px);
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ka-banner-header {
+  padding: 20px 24px;
+  background: rgba(22, 22, 31, 0.7);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.ka-banner-title {
+  font-family: var(--ka-font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ka-text-primary);
+  display: flex;
+  align-items: center;
   gap: 8px;
-  font-weight: 600;
-  color: #222;
+}
+
+.ka-logo-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 16px;
+  background: var(--ka-accent);
+  animation: ka-blink 1s step-end infinite;
+}
+
+@keyframes ka-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.ka-banner-content {
+  padding: 30px 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.ka-module {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 500px;
+}
+
+.ka-module-label {
+  font-family: var(--ka-font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--ka-accent);
+  font-weight: 700;
+}
+
+.ka-controls-row {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.ka-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
 }
 
 .ka-filter-input {
-  max-width: 220px;
-  padding: 6px 8px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+  width: 100%;
+  padding: 14px 20px;
+  padding-left: 50px;
+  font-family: var(--ka-font-mono);
+  font-size: 14px;
+  color: var(--ka-text-primary);
+  background: var(--ka-bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  color-scheme: dark; 
 }
 
-.ka-filter-hint {
-  margin: 8px 0 0;
-  font-size: 12px;
-  color: #666;
+.ka-filter-input:focus {
+  outline: none;
+  border-color: var(--ka-accent);
+  box-shadow: 0 0 0 1px var(--ka-accent);
+  background: #1a1a24;
 }
 
+.ka-input-icon {
+  position: absolute;
+  left: 20px;
+  font-size: 18px;
+  color: var(--ka-text-secondary);
+  pointer-events: none;
+  transition: color 0.3s ease;
+}
+
+.ka-filter-input:focus + .ka-input-icon {
+  color: var(--ka-accent);
+}
+
+.ka-apply-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0 24px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: var(--ka-font-display);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ka-bg-primary);
+  background: linear-gradient(135deg, #a3bd33, var(--ka-accent));
+  box-shadow: 0 4px 15px rgba(134, 158, 30, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.ka-apply-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(134, 158, 30, 0.5);
+  filter: brightness(1.1);
+}
+
+.ka-apply-btn:active {
+  transform: translateY(0);
+}
+
+.ka-module-hint {
+  font-size: 13px;
+  color: var(--ka-text-secondary);
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+.ka-banner-footer {
+  padding: 12px 24px;
+  background: rgba(22, 22, 31, 0.8);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  z-index: 1;
+}
+
+.ka-footer-text {
+  font-family: var(--ka-font-mono);
+  font-size: 11px;
+  color: var(--ka-text-secondary);
+}
+
+.ka-footer-link {
+  color: var(--ka-text-primary);
+  text-decoration: none;
+  font-weight: 700;
+  margin-left: 4px;
+  transition: color 0.2s;
+  position: relative;
+}
+
+.ka-footer-link:hover {
+  color: var(--ka-accent);
+}
+
+/* --- NEUES BADGE DESIGN (Nativ & Clean) --- */
+
+/* Badge Container für sauberes Alignment */
+.ka-badge-inline {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 8px; /* Abstand zum Ort/Datum Text */
+}
+
+/* Das eigentliche Badge */
 .ka-member-since-badge {
-  margin-top: 8px;
-  padding: 4px 8px;
-  background: #f3f4f6;
-  border-radius: 4px;
-  font-size: 12px;
-  color: #333;
-  display: inline-block;
-}
-
-.ka-member-since-unknown .ka-member-since-badge {
-  background: #fff4cc;
-  color: #8a6d3b;
-}
-
-.ka-member-since-hidden {
-  display: none !important;
-}
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  
+  /* Kompakter für "Native Look" */
+  padding: 2px 8px; 
+  height: 20px;
+  
+  /* Weißer Hintergrund, dezenter Rahmen */
+  background: #ffffff;
+  border: 1px solid #d1d5db; /* Neutrales Grau */
+  border-radius: 99px; /* Pill Shape - wirkt moderner */
+  
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #575757; /* Standard Kleinanzeigen Text Grau */
+  line-height: 1;
+  white-space: nowrap;
+  
+  transition: all 0.
