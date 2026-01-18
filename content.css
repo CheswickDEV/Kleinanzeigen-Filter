@@ -16,7 +16,7 @@
   --ka-font-mono: 'JetBrains Mono', monospace;
 }
 
-/* --- DASHBOARD STYLES (Unverändert gut) --- */
+/* --- DASHBOARD STYLES --- */
 .ka-filter-banner {
   margin-bottom: 24px;
   width: 100%;
@@ -221,35 +221,46 @@
   color: var(--ka-accent);
 }
 
-/* --- NEUES BADGE DESIGN (Nativ & Clean) --- */
+/* --- BADGE STYLES (Repariert & Vollständig) --- */
 
-/* Badge Container für sauberes Alignment */
 .ka-badge-inline {
   display: inline-flex;
   vertical-align: middle;
-  margin-left: 8px; /* Abstand zum Ort/Datum Text */
+  margin-left: 8px;
 }
 
-/* Das eigentliche Badge */
 .ka-member-since-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  
-  /* Kompakter für "Native Look" */
   padding: 2px 8px; 
   height: 20px;
-  
-  /* Weißer Hintergrund, dezenter Rahmen */
   background: #ffffff;
-  border: 1px solid #d1d5db; /* Neutrales Grau */
-  border-radius: 99px; /* Pill Shape - wirkt moderner */
-  
+  border: 1px solid #d1d5db;
+  border-radius: 99px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 11px;
   font-weight: 500;
-  color: #575757; /* Standard Kleinanzeigen Text Grau */
+  color: #575757;
   line-height: 1;
   white-space: nowrap;
-  
-  transition: all 0.
+  transition: all 0.2s ease;
+}
+
+.ka-badge-icon {
+  font-size: 10px;
+}
+
+/* --- FUNKTIONALE KLASSEN (ESSITIELL FÜR DEN FILTER!) --- */
+
+/* Sorgt dafür, dass gefilterte Anzeigen wirklich verschwinden */
+.ka-member-since-hidden {
+  display: none !important;
+}
+
+/* Markiert Anzeigen ohne lesbares Datum */
+.ka-member-since-unknown .ka-member-since-badge {
+  background: #fff4cc;
+  border-color: #ffe08a;
+  color: #8a6d3b;
+}
