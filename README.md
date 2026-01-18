@@ -1,42 +1,50 @@
-# Kleinanzeigen-Filter
+# Kleinanzeigen Filter // Cheswick Edition
 
-Firefox-Addon zum Filtern von Kleinanzeigen-Angeboten nach dem Mitglied-seit-Datum der Anbieter.
+![Version](https://img.shields.io/badge/version-1.0.0-869e1e?style=for-the-badge&logo=firefox)
+![Status](https://img.shields.io/badge/status-Live-869e1e?style=for-the-badge)
+![Tech](https://img.shields.io/badge/powered_by-cheswick.dev-0a0a0f?style=for-the-badge)
 
-![Ablaufdiagramm des Addons](docs/assets/flow.svg)
+**Das ultimative Power-User Tool für Kleinanzeigen.**
+Dieses Firefox-Addon erweitert die Suchergebnisse um essentielle Metadaten und ermöglicht das Filtern von Anbietern basierend auf ihrem Registrierungsdatum. Verpackt in einem modernen Dark-Mode Interface, inspiriert von `cheswick.dev`.
 
-## Funktionsumfang
+---
 
-- Fügt auf Ergebnislisten ein Filter-Panel hinzu, mit dem ein Stichtag gewählt werden kann.
-- Öffnet Anzeigen im Hintergrund, ruft das Profil des Anbieters auf und ermittelt das Mitglied-seit-Datum.
-- Blendet automatisch Anbieter aus, die nach dem Stichtag beigetreten sind.
-- Markiert Anzeigen ohne ermittelbares Datum, blendet sie aber nicht automatisch aus.
-- Speichert den Filterstatus lokal und wendet ihn beim nächsten Besuch automatisch an.
+## 📸 Visual Tour
 
-## Installation (Firefox)
+### Das Dashboard
+Ein modernes HUD (Heads-Up Display), das sich nahtlos über die Suchergebnisse legt. Hier steuerst du den Zeitfilter.
+*(Bitte Screenshot hier einfügen: docs/assets/dashboard.png)*
 
-1. Repository klonen oder als ZIP herunterladen.
-2. In Firefox `about:debugging#/runtime/this-firefox` öffnen.
-3. **"Temporäres Add-on laden"** wählen.
-4. Die Datei `manifest.json` aus diesem Projekt auswählen.
-5. Eine Suche auf `https://www.kleinanzeigen.de/` ausführen – das Panel erscheint automatisch.
+### Inline Metadaten
+Anstatt jedes Profil einzeln klicken zu müssen, siehst du das "Mitglied seit"-Datum direkt in der Ergebnisliste – sauber integriert und nativ im Look.
+*(Bitte Screenshot hier einfügen: docs/assets/list-view.png)*
 
-> Hinweis: Für eine dauerhafte Installation muss das Add-on signiert sein. Für die Entwicklung reicht der temporäre Modus.
+---
 
-## Bedienung
+## ⚡ Features
 
-1. Auf einer Ergebnisliste den gewünschten Stichtag im Panel auswählen.
-2. Das Add-on lädt Anzeigen und Anbieterprofile im Hintergrund.
-3. Anbieter, die nach dem Stichtag beigetreten sind, werden ausgeblendet.
-4. Anzeigen ohne Datum bleiben sichtbar, sind aber markiert.
+### 📅 Time Travel Filter
+Lege einen Stichtag fest (z.B. "01.01.2023"). Das Addon analysiert im Hintergrund alle Anbieter und blendet automatisch Ergebnisse aus, deren Ersteller **nach** diesem Datum beigetreten sind. Perfekt, um kurzfristig erstellte Accounts (oft Bots oder Scalper) zu vermeiden.
 
-## Produktbeispiel
+### 👁️ Instant Insights
+Das Addon fetcht die Profildaten asynchron im Hintergrund.
+- **Smart Caching:** Profile werden lokal zwischengespeichert, um Anfragen zu minimieren.
+- **Visual Feedback:** Ein "👤 Seit: TT.MM.JJJJ" Badge erscheint sofort neben dem Ort/Datum der Anzeige.
+- **Warning System:** Unbekannte oder nicht lesbare Daten werden mit einem gelben Warn-Icon markiert.
 
-![Mockup des Filter-Panels](docs/assets/panel-mock.svg)
+### 🎨 Cheswick Design System
+Das UI bringt den `cheswick.dev` Look auf Kleinanzeigen:
+- **Dark Mode Dashboard:** Kontrastreiches Panel mit Neon-Akzenten (`#869e1e`).
+- **Glow Effects:** Subtile Hintergrund-Animationen.
+- **Glassmorphism:** Moderne, transparente Header-Elemente.
+- **Native Integration:** Die Badges in den Listen passen sich dem hellen Design von Kleinanzeigen an, um den Lesefluss nicht zu stören.
 
-## Entwicklung
+---
 
-Die wichtigsten Dateien:
+## 🚀 Installation
 
-- `manifest.json` – Firefox-Manifest inkl. Content- und Background-Skripte.
-- `content.js` / `content.css` – UI und Filterlogik auf Ergebnislisten.
-- `background.js` – Hintergrund-Logik zum Abrufen der Mitglied-seit-Daten.
+Aktuell ist das Addon für den Entwickler-Modus in Firefox optimiert.
+
+1. **Repository klonen**
+   ```bash
+   git clone [https://github.com/cheswickdev/kleinanzeigen-filter.git](https://github.com/cheswickdev/kleinanzeigen-filter.git)

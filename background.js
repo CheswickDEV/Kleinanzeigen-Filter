@@ -2,9 +2,11 @@ const LISTING_URL_PATTERN = /\/s-anzeige\//;
 const PROFILE_URL_PATTERNS = [
   /\/s-anbieter\//,
   /\/s-profil\//,
-  /\/s-mitglied\//
+  /\/s-mitglied\//,
+  /\/s-bestandsliste\.html/
 ];
-const MEMBER_SINCE_REGEX = /Mitglied\s*seit\s*(\d{2}\.\d{2}\.\d{4})/i;
+// Regex erweitert um "Aktiv seit"
+const MEMBER_SINCE_REGEX = /(?:Mitglied|Aktiv)\s*seit\s*(\d{2}\.\d{2}\.\d{4})/i;
 
 async function getCache() {
   const { memberSinceCache = {} } = await browser.storage.local.get("memberSinceCache");
@@ -46,28 +48,45 @@ async function resolveMemberSince(listingUrl) {
     return cached;
   }
 
-  const listingDocument = await fetchDocument(listingUrl);
-  const profileUrl = extractProfileUrl(listingDocument, listingUrl);
-  if (!profileUrl) {
-    cache[listingUrl] = null;
+  try {
+    const listingDocument = await fetchDocument(listingUrl);
+
+    // 1. Versuch: Datum direkt aus der Anzeige lesen (schneller)
+    let memberSince = extractMemberSince(listingDocument);
+
+    if (memberSince) {
+      cache[listingUrl] = memberSince;
+      await setCache(cache);
+      return memberSince;
+    }
+
+    // 2. Versuch: Profilseite aufrufen
+    const profileUrl = extractProfileUrl(listingDocument, listingUrl);
+    if (!profileUrl) {
+      cache[listingUrl] = null;
+      await setCache(cache);
+      return null;
+    }
+
+    const profileCache = cache[profileUrl];
+    if (profileCache !== undefined) {
+      cache[listingUrl] = profileCache;
+      await setCache(cache);
+      return profileCache;
+    }
+
+    const profileDocument = await fetchDocument(profileUrl);
+    memberSince = extractMemberSince(profileDocument);
+
+    cache[profileUrl] = memberSince;
+    cache[listingUrl] = memberSince;
     await setCache(cache);
+    return memberSince;
+
+  } catch (error) {
+    console.error("Fehler beim Abrufen der Daten:", error);
     return null;
   }
-
-  const profileCache = cache[profileUrl];
-  if (profileCache !== undefined) {
-    cache[listingUrl] = profileCache;
-    await setCache(cache);
-    return profileCache;
-  }
-
-  const profileDocument = await fetchDocument(profileUrl);
-  const memberSince = extractMemberSince(profileDocument);
-
-  cache[profileUrl] = memberSince;
-  cache[listingUrl] = memberSince;
-  await setCache(cache);
-  return memberSince;
 }
 
 browser.runtime.onMessage.addListener((message) => {
