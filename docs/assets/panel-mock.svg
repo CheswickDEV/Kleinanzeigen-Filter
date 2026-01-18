@@ -1,0 +1,15 @@
+<svg width="900" height="420" viewBox="0 0 900 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="420" fill="#F1F5F9"/>
+  <rect x="60" y="40" width="780" height="340" rx="16" fill="#FFFFFF" stroke="#CBD5F5"/>
+  <rect x="90" y="80" width="720" height="120" rx="12" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="120" y="115" font-family="Arial" font-size="18" fill="#1E293B">Filter-Panel: Anbieter-Mitgliedschaft vor Datum anzeigen</text>
+  <rect x="120" y="135" width="220" height="36" rx="6" fill="#FFFFFF" stroke="#94A3B8"/>
+  <text x="130" y="158" font-family="Arial" font-size="14" fill="#64748B">2021-01-01</text>
+  <text x="120" y="185" font-family="Arial" font-size="12" fill="#64748B">Anzeigen ohne Datum bleiben sichtbar und werden markiert.</text>
+
+  <rect x="90" y="230" width="720" height="50" rx="10" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <text x="120" y="262" font-family="Arial" font-size="14" fill="#334155">Anzeige A · Mitglied seit 12.04.2018</text>
+
+  <rect x="90" y="290" width="720" height="50" rx="10" fill="#FFF7ED" stroke="#F59E0B"/>
+  <text x="120" y="322" font-family="Arial" font-size="14" fill="#92400E">Anzeige B · Mitglied seit: unbekannt (markiert)</text>
+</svg>
