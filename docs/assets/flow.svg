@@ -1,0 +1,28 @@
+<svg width="900" height="360" viewBox="0 0 900 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="360" fill="#F8FAFC"/>
+  <rect x="40" y="60" width="220" height="80" rx="12" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+  <text x="150" y="105" text-anchor="middle" font-family="Arial" font-size="16" fill="#1E293B">Ergebnisliste</text>
+
+  <rect x="320" y="60" width="220" height="80" rx="12" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+  <text x="430" y="95" text-anchor="middle" font-family="Arial" font-size="16" fill="#1E293B">Anzeige öffnen</text>
+  <text x="430" y="118" text-anchor="middle" font-family="Arial" font-size="12" fill="#334155">(Background)</text>
+
+  <rect x="600" y="60" width="220" height="80" rx="12" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+  <text x="710" y="95" text-anchor="middle" font-family="Arial" font-size="16" fill="#1E293B">Anbieterprofil</text>
+  <text x="710" y="118" text-anchor="middle" font-family="Arial" font-size="12" fill="#334155">Mitglied seit</text>
+
+  <rect x="180" y="210" width="540" height="90" rx="12" fill="#DBEAFE" stroke="#3B82F6" stroke-width="2"/>
+  <text x="450" y="250" text-anchor="middle" font-family="Arial" font-size="16" fill="#1E3A8A">Filter anwenden &amp; lokale Speicherung</text>
+  <text x="450" y="275" text-anchor="middle" font-family="Arial" font-size="12" fill="#1E40AF">Nur Anbieter vor Stichtag sichtbar</text>
+
+  <path d="M260 100 L320 100" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M540 100 L600 100" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M710 140 L710 210" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M430 140 L430 210" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#64748B"/>
+    </marker>
+  </defs>
+</svg>
