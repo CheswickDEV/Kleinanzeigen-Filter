@@ -39,9 +39,20 @@ function markListing(listingElement, memberSince) {
   }
   
   const badge = badgeContainer.querySelector(".ka-member-since-badge");
-  const icon = memberSince ? "👤" : "⚠️";
+  const iconChar = memberSince ? "👤" : "⚠️";
   
-  badge.innerHTML = `<span class="ka-badge-icon">${icon}</span> <span>Seit: ${formatMemberSince(memberSince)}</span>`;
+  // SICHERHEITS-FIX: DOM-Elemente statt innerHTML
+  badge.textContent = ""; // Inhalt leeren
+  
+  const iconSpan = document.createElement("span");
+  iconSpan.className = "ka-badge-icon";
+  iconSpan.textContent = iconChar;
+  
+  const textSpan = document.createElement("span");
+  textSpan.textContent = ` Seit: ${formatMemberSince(memberSince)}`;
+  
+  badge.appendChild(iconSpan);
+  badge.appendChild(textSpan);
   
   listingElement.dataset.memberSince = memberSince || "";
   listingElement.classList.toggle("ka-member-since-unknown", !memberSince);
@@ -86,7 +97,8 @@ function buildPanel(initialValue) {
   const panel = document.createElement("div");
   panel.className = "ka-filter-banner";
   
-  // Update auf v1.0 und Live-Status Design
+  // SICHERHEITS-FIX: Keine Variablen (${...}) im HTML-String.
+  // Wir setzen den Wert 'initialValue' später sicher über das DOM.
   panel.innerHTML = `
     <div class="ka-banner-header">
       <div class="ka-banner-title">
@@ -103,11 +115,11 @@ function buildPanel(initialValue) {
         
         <div class="ka-controls-row">
             <div class="ka-input-wrapper">
-              <input class="ka-filter-input" type="text" placeholder="Datum wählen..." onfocus="(this.type='date')" onblur="(this.value ? this.type='date' : this.type='text')" value="${initialValue}" />
+              <input class="ka-filter-input" type="text" placeholder="Datum wählen..." />
               <span class="ka-input-icon">📅</span>
             </div>
             <button class="ka-apply-btn">
-                Anwenden
+                <span class="ka-btn-text">Anwenden</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
@@ -124,6 +136,14 @@ function buildPanel(initialValue) {
       <span class="ka-footer-text">powered by <a href="https://cheswick.dev" target="_blank" class="ka-footer-link">cheswick.dev</a></span>
     </div>
   `;
+
+  // Wert sicher setzen
+  const input = panel.querySelector(".ka-filter-input");
+  input.value = initialValue;
+  // Event-Handler für Input-Typ (Date/Text toggle)
+  input.onfocus = function() { this.type = 'date'; };
+  input.onblur = function() { this.value ? this.type = 'date' : this.type = 'text'; };
+
   return panel;
 }
 
@@ -144,6 +164,7 @@ async function initializePanel() {
 
   const input = panel.querySelector(".ka-filter-input");
   const applyBtn = panel.querySelector(".ka-apply-btn");
+  const btnText = panel.querySelector(".ka-btn-text"); // Referenz auf den Text-Span
 
   if (input.value) { input.type = 'date'; }
 
@@ -151,8 +172,9 @@ async function initializePanel() {
     if (!input.value) { input.type = 'text'; }
     await saveFilterDate(input.value);
     
-    const originalText = applyBtn.innerHTML;
-    applyBtn.innerHTML = `Lädt...`;
+    // SICHERHEITS-FIX: Nur Text ändern, nicht innerHTML
+    const originalText = btnText.textContent;
+    btnText.textContent = "Lädt...";
     applyBtn.style.opacity = "0.7";
     
     const filterDate = normalizeDate(input.value);
@@ -163,7 +185,7 @@ async function initializePanel() {
     });
 
     setTimeout(() => {
-        applyBtn.innerHTML = originalText;
+        btnText.textContent = originalText;
         applyBtn.style.opacity = "1";
     }, 300);
   };
