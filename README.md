@@ -13,7 +13,7 @@ Dieses Firefox-Addon erweitert die Suchergebnisse um essentielle Metadaten und e
 
 ### Das Dashboard
 Ein modernes HUD (Heads-Up Display), das sich nahtlos über die Suchergebnisse legt. Hier steuerst du den Zeitfilter.
-*(Bitte Screenshot hier einfügen: docs/assets/dashboard.png)*
+![Screenshot](https://i.imgur.com/jhb22Vr.png)
 
 ### Inline Metadaten
 Anstatt jedes Profil einzeln klicken zu müssen, siehst du das "Mitglied seit"-Datum direkt in der Ergebnisliste – sauber integriert und nativ im Look.
