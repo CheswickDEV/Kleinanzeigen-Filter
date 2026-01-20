@@ -13,6 +13,7 @@ Dieses Firefox-Addon erweitert die Suchergebnisse um essentielle Metadaten und e
 
 ### Das Dashboard
 Ein modernes HUD (Heads-Up Display), das sich nahtlos über die Suchergebnisse legt. Hier steuerst du den Zeitfilter.
+
 ![Screenshot](https://i.imgur.com/jhb22Vr.png)
 
 ### Inline Metadaten
