@@ -32,7 +32,8 @@
   overflow: hidden;
   font-family: var(--ka-font-display);
   position: relative;
-  z-index: 90;
+  /* FIX: z-index reduziert damit Kleinanzeigen-Dropdowns darüber liegen */
+  z-index: 1;
 }
 
 .ka-filter-banner::before {

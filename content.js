@@ -1,5 +1,12 @@
 const STORAGE_KEY = "memberSinceFilterDate";
 
+// Nur auf Seiten mit echten Suchergebnissen aktiv
+function isSearchResultsPage() {
+  const url = window.location.pathname;
+  // Suchergebnisse: /s-*, aber NICHT die reine Hauptseite /
+  return url.startsWith("/s-") || url.includes("/s-suchanfrage") || document.querySelector("#srchrslt-adtable") !== null;
+}
+
 function normalizeDate(value) {
   if (!value) return null;
   const parts = value.split("-");
@@ -97,8 +104,6 @@ function buildPanel(initialValue) {
   const panel = document.createElement("div");
   panel.className = "ka-filter-banner";
   
-  // SICHERHEITS-FIX: Keine Variablen (${...}) im HTML-String.
-  // Wir setzen den Wert 'initialValue' später sicher über das DOM.
   panel.innerHTML = `
     <div class="ka-banner-header">
       <div class="ka-banner-title">
@@ -106,7 +111,7 @@ function buildPanel(initialValue) {
         Kleinanzeigen Filter
         <span class="ka-logo-cursor"></span>
       </div>
-      <div style="font-size: 10px; font-family: var(--ka-font-mono); color: var(--ka-accent); border: 1px solid var(--ka-accent); padding: 2px 6px; border-radius: 4px; font-weight: 600;">v1.0</div>
+      <div style="font-size: 10px; font-family: var(--ka-font-mono); color: var(--ka-accent); border: 1px solid var(--ka-accent); padding: 2px 6px; border-radius: 4px; font-weight: 600;">v1.1</div>
     </div>
     
     <div class="ka-banner-content">
@@ -148,23 +153,29 @@ function buildPanel(initialValue) {
 }
 
 async function initializePanel() {
+  // Prüfen ob Panel bereits existiert
+  if (document.querySelector(".ka-filter-banner")) {
+    return normalizeDate(await loadFilterDate());
+  }
+
   const storedValue = await loadFilterDate();
   const panel = buildPanel(storedValue);
   
+  // Suchergebnisse-Container finden
   const resultsTable = document.querySelector("#srchrslt-adtable");
-  const galleryView = document.querySelector(".is-gallery");
-  const targetContainer = resultsTable || galleryView;
-
-  if (targetContainer && targetContainer.parentNode) {
-    targetContainer.parentNode.insertBefore(panel, targetContainer);
+  
+  if (resultsTable && resultsTable.parentNode) {
+    // Vor den Suchergebnissen einfügen
+    resultsTable.parentNode.insertBefore(panel, resultsTable);
   } else {
-    const main = document.querySelector("main") || document.body;
-    main.prepend(panel);
+    // Fallback: Am Anfang des main-Bereichs einfügen
+    const mainContent = document.querySelector("main") || document.querySelector("#site-content") || document.body;
+    mainContent.prepend(panel);
   }
 
   const input = panel.querySelector(".ka-filter-input");
   const applyBtn = panel.querySelector(".ka-apply-btn");
-  const btnText = panel.querySelector(".ka-btn-text"); // Referenz auf den Text-Span
+  const btnText = panel.querySelector(".ka-btn-text");
 
   if (input.value) { input.type = 'date'; }
 
@@ -172,7 +183,6 @@ async function initializePanel() {
     if (!input.value) { input.type = 'text'; }
     await saveFilterDate(input.value);
     
-    // SICHERHEITS-FIX: Nur Text ändern, nicht innerHTML
     const originalText = btnText.textContent;
     btnText.textContent = "Lädt...";
     applyBtn.style.opacity = "0.7";
@@ -224,6 +234,11 @@ async function processAllListings(filterDate) {
 
 async function init() {
   if (!document.body) return;
+  
+  // NUR auf Suchergebnisseiten aktiv, nicht auf der Hauptseite
+  if (!isSearchResultsPage()) {
+    return;
+  }
 
   const filterDate = await initializePanel();
   await processAllListings(filterDate);
@@ -247,5 +262,10 @@ async function init() {
 }
 
 if (window.location.hostname.includes("kleinanzeigen.de")) {
-  init();
+  // Warten bis DOM bereit ist
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 }
