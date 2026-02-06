@@ -1,94 +1,142 @@
-# Kleinanzeigen Filter // Cheswick Edition
+# 🛡️ Kleinanzeigen Filter
 
-![Version](https://img.shields.io/badge/version-1.1.0-869e1e?style=for-the-badge&logo=firefox)
-![Status](https://img.shields.io/badge/status-Live-869e1e?style=for-the-badge)
-![Tech](https://img.shields.io/badge/powered_by-cheswick.dev-0a0a0f?style=for-the-badge)
+### A Firefox extension that reveals seller registration dates on Kleinanzeigen.de and lets you filter out freshly created accounts — your first line of defense against bots and scalpers.
 
-**Das ultimative Power-User Tool für Kleinanzeigen.**
-Dieses Firefox-Addon erweitert die Suchergebnisse um essentielle Metadaten und ermöglicht das Filtern von Anbietern basierend auf ihrem Registrierungsdatum. Verpackt in einem modernen Dark-Mode Interface, inspiriert von `cheswick.dev`.
+[![GitHub Stars](https://img.shields.io/github/stars/CheswickDEV/Kleinanzeigen-Filter?color=00d4ff&labelColor=16161f)](https://github.com/CheswickDEV/Kleinanzeigen-Filter)
+[![Last Commit](https://img.shields.io/github/last-commit/CheswickDEV/Kleinanzeigen-Filter?color=a855f7&labelColor=16161f)](https://github.com/CheswickDEV/Kleinanzeigen-Filter/commits/main)
+![Version](https://img.shields.io/badge/version-1.1.0-00d4ff?labelColor=16161f)
+![Status](https://img.shields.io/badge/status-Active-00d4ff?labelColor=16161f)
+![License](https://img.shields.io/badge/license-MIT-a855f7?labelColor=16161f)
+![Firefox](https://img.shields.io/badge/Firefox-Manifest_v2-a855f7?logo=firefox&logoColor=white&labelColor=16161f)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-00d4ff?logo=javascript&logoColor=white&labelColor=16161f)
+
+---
+
+## 💡 What It Does
+
+Kleinanzeigen.de doesn't show you how long a seller has been on the platform — you have to click every single profile to find out. This extension fixes that by:
+
+1. Fetching seller profile data in the background for every listing in your search results
+2. Displaying a **"Member since"** badge directly in each listing card
+3. Letting you set a **cutoff date** — any seller who registered *after* that date gets hidden automatically
+
+Set the filter to "01.01.2024" and instantly see only listings from established sellers. Freshly created throwaway accounts (often bots, scalpers, or scammers) disappear from your results.
 
 ---
 
-## 📸 Visual Tour
+<!-- Screenshots — replace with actual screenshots when available -->
+<!--
+## 📸 Screenshots
 
-### Das Dashboard
-Ein modernes HUD (Heads-Up Display), das sich nahtlos über die Suchergebnisse legt. Hier steuerst du den Zeitfilter.
-*(Bitte Screenshot hier einfügen: docs/assets/dashboard.png)*
-
-### Inline Metadaten
-Anstatt jedes Profil einzeln klicken zu müssen, siehst du das "Mitglied seit"-Datum direkt in der Ergebnisliste – sauber integriert und nativ im Look.
-*(Bitte Screenshot hier einfügen: docs/assets/list-view.png)*
+| Dashboard | Inline Badges |
+|:---------:|:------------:|
+| <img src="docs/assets/dashboard.png" width="280"> | <img src="docs/assets/list-view.png" width="280"> |
 
 ---
+-->
 
 ## ⚡ Features
 
-### 📅 Time Travel Filter
-Lege einen Stichtag fest (z.B. "01.01.2023"). Das Addon analysiert im Hintergrund alle Anbieter und blendet automatisch Ergebnisse aus, deren Ersteller **nach** diesem Datum beigetreten sind. Perfekt, um kurzfristig erstellte Accounts (oft Bots oder Scalper) zu vermeiden.
+- **📅 Time Travel Filter** — Set a registration date threshold via the HUD dashboard. Listings from sellers who joined after that date are automatically hidden. Perfect for filtering out bot waves that appear after product launches.
 
-### 👁️ Instant Insights
-Das Addon fetcht die Profildaten asynchron im Hintergrund.
-- **Smart Caching:** Profile werden lokal zwischengespeichert, um Anfragen zu minimieren.
-- **Visual Feedback:** Ein "👤 Seit: TT.MM.JJJJ" Badge erscheint sofort neben dem Ort/Datum der Anzeige.
-- **Warning System:** Unbekannte oder nicht lesbare Daten werden mit einem gelben Warn-Icon markiert.
+- **👁️ Instant Insights** — A `👤 Since: DD.MM.YYYY` badge appears next to every listing without clicking into profiles. Profile data is fetched asynchronously in the background.
 
-### 🎨 Cheswick Design System
-Das UI bringt den `cheswick.dev` Look auf Kleinanzeigen:
-- **Dark Mode Dashboard:** Kontrastreiches Panel mit Neon-Akzenten (`#869e1e`).
-- **Glow Effects:** Subtile Hintergrund-Animationen.
-- **Glassmorphism:** Moderne, transparente Header-Elemente.
-- **Native Integration:** Die Badges in den Listen passen sich dem hellen Design von Kleinanzeigen an, um den Lesefluss nicht zu stören.
+- **💾 Smart Caching** — Seller profiles are cached in localStorage to minimize requests. Return visits to the same search results load instantly.
+
+- **⚠️ Warning System** — Profiles that can't be read or return unexpected data are flagged with a yellow warning icon so you know which listings need manual review.
+
+- **🎨 Dark Mode Dashboard** — A floating HUD overlays the search results with a dark theme, neon accents, glassmorphism effects, and subtle glow animations.
 
 ---
 
-## 🚀 Installation
+## 🚀 Quick Start
 
-Aktuell ist das Addon für den Entwickler-Modus in Firefox optimiert.
+### Prerequisites
 
-1. **Repository klonen**
-   ```bash
-   git clone https://github.com/cheswickdev/kleinanzeigen-filter.git
-   ```
+- Firefox (any recent version)
 
-2. **Firefox Entwickler-Modus öffnen**
-   - Öffne `about:debugging#/runtime/this-firefox` in Firefox
+###  Installation
 
-3. **Addon laden**
-   - Klicke auf "Temporäres Add-on laden..."
-   - Wähle die `manifest.json` aus dem heruntergeladenen Ordner
+1. Open [Link](https://addons.mozilla.org/de/firefox/addon/kleinanzeigen-filter/) in Firefox
+2. Click "Install"
+
+###  Installation without Firefox Store
+
+1. Rename the `.zip` file to `.xpi`
+2. In Firefox → Menu → Add-ons and Themes
+3. Gear icon → "Install Add-on From File..."
+4. Select the `.xpi` file
+
+3. **Open Kleinanzeigen.de** — the dashboard and inline badges appear automatically on search results pages
 
 ---
 
-## 📋 Changelog
+## 📖 Usage
 
-### v1.1.0
-- **Fix:** Dashboard erscheint jetzt auch auf der Hauptseite (nicht nur in Suchergebnissen)
-- **Fix:** Z-Index korrigiert – Kleinanzeigen-Dropdowns (Profil-Menü, etc.) werden nicht mehr vom Addon verdeckt
-- **Verbessert:** Robustere Erkennung von Anzeigen-Containern auf verschiedenen Seitentypen
-- **Verbessert:** DOM-Ready Check für zuverlässigeres Laden
+1. Open any search results page on [kleinanzeigen.de](https://www.kleinanzeigen.de)
+2. The floating **dashboard panel** appears in the top area of the page
+3. Set your desired cutoff date (e.g. `01.01.2023`)
+4. Listings from sellers who registered **after** that date are faded out or hidden
+5. Each listing shows a **"👤 Since: DD.MM.YYYY"** badge with the seller's registration date
+
+---
+
+## 🛠️ Tech Stack
+
+![JavaScript](https://img.shields.io/badge/JavaScript-16161f?logo=javascript&logoColor=00d4ff)
+![CSS](https://img.shields.io/badge/CSS3-16161f?logo=css3&logoColor=00d4ff)
+![Firefox](https://img.shields.io/badge/WebExtensions_API-16161f?logo=firefox&logoColor=a855f7)
+
+```
+Kleinanzeigen-Filter/
+├── manifest.json       # Extension manifest (v2)
+├── content.js          # Core logic: profile fetching, filtering, badge injection
+├── content.css         # Inline badge and dashboard styling
+├── background.js       # Background script
+└── README.md
+```
+
+- **JavaScript** (~65%) — Content script with async profile fetching, DOM manipulation, and filter logic
+- **CSS** (~35%) — Dashboard HUD styling with dark theme, glassmorphism, and glow effects
+- **Firefox WebExtensions API** — Storage, content scripts, host permissions
+- **LocalStorage** — Client-side profile caching
+
+---
+
+## 📝 Changelog
+
+### v1.1.0 (current)
+- 🐛 Dashboard now appears on the homepage (not just search results)
+- 🐛 Fixed z-index issues — Kleinanzeigen dropdowns (profile menu, etc.) are no longer obscured by the addon
+- ♻️ More robust listing container detection across different page types
+- ♻️ Improved DOM-ready check for more reliable loading
+
+<details>
+<summary>Older versions</summary>
 
 ### v1.0.0
-- Initiales Release
-- Dashboard mit Datumsfilter
-- Inline Badges für "Mitglied seit"
-- Smart Caching für Profile
-- Cheswick.dev Design System
+- 🚀 Initial release
+- ✨ Dashboard with date filter
+- ✨ Inline "Member since" badges
+- ✨ Smart profile caching
+- ✨ Dark mode HUD design
+
+</details>
 
 ---
 
-## 🛠️ Technologie
+## 📄 License
 
-- **JavaScript** (65%)
-- **CSS** (35%)
-- Firefox WebExtensions API
-- LocalStorage für Smart Caching
+[MIT](LICENSE) — do what you want, just give credit.
 
 ---
 
-## 📄 Lizenz
+<p align="center">
+  <a href="https://cheswick.dev">
+    <img src="https://img.shields.io/badge/CHESWICK.DEV-00d4ff?style=for-the-badge&logo=firefox&logoColor=0a0a0f&labelColor=a855f7" alt="cheswick.dev" />
+  </a>
+</p>
 
-MIT License – siehe LICENSE Datei für Details.
-
----
-
-**Made with 🖤 by [cheswick.dev](https://cheswick.dev)**
+<p align="center">
+  Made with 🖤 by <a href="https://cheswick.dev">cheswick.dev</a>
+</p>
